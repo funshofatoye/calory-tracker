@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calorie Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <h1>🔥 Calorie Tracker</h1>
+      <p class="header-date" id="header-date"></p>
+    </header>
+
+    <!-- Daily Summary Card -->
+    <section class="summary-card">
+      <div class="summary-top">
+        <div class="summary-consumed">
+          <span class="summary-number" id="total-calories">0</span>
+          <span class="summary-label">consumed</span>
+        </div>
+        <div class="summary-ring" id="summary-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52" />
+            <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52" />
+          </svg>
+          <div class="ring-text">
+            <span id="remaining-calories">0</span>
+            <small>remaining</small>
+          </div>
+        </div>
+        <div class="summary-goal">
+          <span class="summary-number" id="goal-calories">2000</span>
+          <span class="summary-label">goal</span>
+        </div>
+      </div>
+      <div class="macro-bars">
+        <div class="macro-item">
+          <div class="macro-header">
+            <span>🍳 Breakfast</span>
+            <span id="breakfast-cal">0</span>
+          </div>
+          <div class="macro-bar"><div class="macro-bar-fill breakfast-fill" id="breakfast-bar"></div></div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-header">
+            <span>🥗 Lunch</span>
+            <span id="lunch-cal">0</span>
+          </div>
+          <div class="macro-bar"><div class="macro-bar-fill lunch-fill" id="lunch-bar"></div></div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-header">
+            <span>🍝 Dinner</span>
+            <span id="dinner-cal">0</span>
+          </div>
+          <div class="macro-bar"><div class="macro-bar-fill dinner-fill" id="dinner-bar"></div></div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-header">
+            <span>🍎 Snacks</span>
+            <span id="snack-cal">0</span>
+          </div>
+          <div class="macro-bar"><div class="macro-bar-fill snack-fill" id="snack-bar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="actions">
+      <button class="btn btn-primary" id="btn-add-entry">+ Add Food</button>
+      <button class="btn btn-secondary" id="btn-set-goal">🎯 Set Goal</button>
+      <button class="btn btn-secondary" id="btn-view-history">📅 History</button>
+    </section>
+
+    <!-- Date Navigation -->
+    <section class="date-nav">
+      <button class="date-nav-btn" id="prev-day">‹</button>
+      <button class="date-nav-today" id="today-btn">Today</button>
+      <button class="date-nav-btn" id="next-day">›</button>
+    </section>
+
+    <!-- Food Entries List -->
+    <section class="entries-section">
+      <h2 class="section-title">Food Log</h2>
+      <div id="entries-list" class="entries-list">
+        <p class="empty-state" id="empty-state">No entries yet. Tap "+ Add Food" to get started!</p>
+      </div>
+    </section>
+
+    <!-- Weekly Mini Chart -->
+    <section class="weekly-section">
+      <h2 class="section-title">This Week</h2>
+      <div class="weekly-chart" id="weekly-chart"></div>
+    </section>
+  </div>
+
+  <!-- Modal: Add Entry -->
+  <div class="modal-overlay" id="modal-add" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Food Entry</h2>
+        <button class="modal-close" id="modal-add-close">&times;</button>
+      </div>
+      <form id="add-form" class="modal-form">
+        <div class="form-group">
+          <label for="food-name">Food Name</label>
+          <input type="text" id="food-name" placeholder="e.g. Grilled Chicken" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="food-calories">Calories</label>
+          <input type="number" id="food-calories" placeholder="e.g. 350" min="1" required />
+        </div>
+        <div class="form-group">
+          <label for="food-meal">Meal</label>
+          <select id="food-meal" required>
+            <option value="breakfast">🍳 Breakfast</option>
+            <option value="lunch">🥗 Lunch</option>
+            <option value="dinner">🍝 Dinner</option>
+            <option value="snack">🍎 Snack</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Add Entry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Set Goal -->
+  <div class="modal-overlay" id="modal-goal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Set Daily Goal</h2>
+        <button class="modal-close" id="modal-goal-close">&times;</button>
+      </div>
+      <form id="goal-form" class="modal-form">
+        <div class="form-group">
+          <label for="goal-input">Daily Calorie Goal</label>
+          <input type="number" id="goal-input" placeholder="e.g. 2000" min="500" max="10000" required />
+        </div>
+        <div class="goal-presets">
+          <button type="button" class="preset-btn" data-value="1500">1500</button>
+          <button type="button" class="preset-btn" data-value="2000">2000</button>
+          <button type="button" class="preset-btn" data-value="2500">2500</button>
+          <button type="button" class="preset-btn" data-value="3000">3000</button>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Save Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: History -->
+  <div class="modal-overlay" id="modal-history" aria-hidden="true">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2>History</h2>
+        <button class="modal-close" id="modal-history-close">&times;</button>
+      </div>
+      <div class="history-list" id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
